@@ -1,4 +1,7 @@
 const express = require('express');
+const BancoUtils = require('../helpers/bancoUtils');
+const Usuario = require('../models/usuario');
+
 const routers = express.Router();
 
 
@@ -7,6 +10,8 @@ routers.get('/', (req,res) => {
 });
 
 routers.post('/', (req,res) => {
+    const usuario = {rm: 2, nome: 'Paula', curso: 1};
+    BancoUtils.insert(usuario, Usuario.tabela);
     res.json("Inserindo usuários");
 })
 
