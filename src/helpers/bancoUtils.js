@@ -1,13 +1,10 @@
 const con = require('./banco');
 
 class BancoUtils {
-    static insert(obj, tb){
+    static insert(obj, tb, cb){
         con.query(`INSERT INTO ${tb} SET ?`, obj, (err,res) => {
-            if(err){
-                throw err;
-            } else {
-                return res;
-            }
+            if(err)  throw err;
+            cb(res);
         });
     }
 

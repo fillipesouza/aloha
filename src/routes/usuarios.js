@@ -14,8 +14,9 @@ routers.get('/', (req,res) => {
 
 routers.post('/', (req,res) => {
     const usuario = {rm: 2, nome: 'Paula', curso: 1};
-    BancoUtils.insert(usuario, Usuario.tabela);
-    res.json("Inserindo usuários");
+    BancoUtils.insert(usuario, Usuario.tabela, (r) => {
+        res.json(r);
+    });
 })
 
 routers.put('/', (req,res) => {
