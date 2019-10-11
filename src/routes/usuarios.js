@@ -6,7 +6,10 @@ const routers = express.Router();
 
 
 routers.get('/', (req,res) => {
-    res.json("Retornando Usuários");
+    BancoUtils.select(Usuario.tabela, (usuarios) => {
+        res.json(usuarios);
+    })
+   
 });
 
 routers.post('/', (req,res) => {

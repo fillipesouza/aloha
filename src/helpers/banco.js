@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const util = require('util');
 
 const con = mysql.createConnection({
     host: 'localhost',
@@ -7,5 +8,5 @@ const con = mysql.createConnection({
     password: '<SENHA>',
     database: 'aloha'
 });
-
+// con.query = util.promisify(con.query);
 module.exports = con;
