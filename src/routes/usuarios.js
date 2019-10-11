@@ -19,11 +19,16 @@ routers.post('/', (req,res) => {
 })
 
 routers.put('/', (req,res) => {
-    res.json("Modificando usuários");
+    const usuarioNovo = new Usuario({rm: 2, nome: "Carla", curso: 1});
+    BancoUtils.put(usuarioNovo, Usuario.tabela, {key: 'rm', value: 2}, (r) => {
+        res.json(r);
+    });
 })
 
 routers.delete('/', (req,res) => {
-    res.json("Removendo usuários");
+    BancoUtils.delete(Usuario.tabela, {key: 'rm', value: 2}, (r) => {
+        res.json(r);
+    });
 })
 module.exports = routers;
 
