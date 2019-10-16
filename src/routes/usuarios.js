@@ -31,7 +31,8 @@ routers.get('/', (req,res) => {
 });
 
 routers.post('/', (req,res) => {
-    const usuario = {rm: 2, nome: 'Paula', curso: 1};
+    const usuario = new Usuario(req.body);
+    usuario.setarSenha(usuario.senha);
     BancoUtils.insert(usuario, Usuario.tabela, (r) => {
         res.json(r);
     });
