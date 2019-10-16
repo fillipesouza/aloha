@@ -2,16 +2,25 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const BancoUtils = require('../helpers/bancoUtils');
 const Usuario = require('../models/usuario');
+const UsuarioDAO = require('../models/usuarioDAO');
 const Utils = require('../helpers/utils');
 const segredo = "AluninhoFeliz";
 const routers = express.Router();
 
 
 routers.post('/auth', (req,res) => {
-   const usuario = "aluno";
-   const senha = "thais123";
-   //const token = jwt.sign({ usuario, senha }, segredo, {expiresIn: '1h'});
-   res.json(Utils.criptografa(senha));
+   const usuario = new Usuario({rm: '3', nome: 'Raquel'});
+   usuario.setarSenha('thais123');
+   new UsuarioDAO().buscaPorUsuarioESenha(usuario, (resposta) => {
+    
+    if(resposta.length > 0){
+        const token = jwt.sign({ nome: resposta.nome }, segredo, {expiresIn: '1h'});
+        res.json(token);
+    } else {
+        res.status(404).end('Nao Encontrado');
+    }
+  });
+   
 })
 
 routers.get('/', (req,res) => {
