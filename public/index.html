@@ -27,23 +27,106 @@
          </tbody>
          <tfoot>
              <tr>
-                <td colspan="5"><button>CRIAR USUARIO</button></td>
+                <td colspan="5">
+                    <a class="waves-effect waves-light btn modal-trigger"  href="#modal-criacao">
+                        CRIAR USUARIO
+                    </a>
+                </td>
              </tr>
          </tfoot>
 
      </table>
 
 
+  <!-- Modal Structure -->
+  <div id="modal-edicao" class="modal">
+    <div class="modal-content">
+            <div class="row">
+              <form class="col s12">
+                      <div class="row container">
+                        <div class="input-field col s12">
+                                <input placeholder="Placeholder" id="ed-nome" name="nome" type="text" class="validate">
+                                <label for="nome">Nome</label>
+                        </div>
+                        <div class="input-field col s12">
+                                <input placeholder="Placeholder" id="ed-curso" name="curso" type="text" class="validate">
+                                <label for="curso">Curso</label>
+                        </div>                    
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+            <a href="#!" style="color: white" class="modal-close waves-effect waves-blue btn-flat blue">EDITAR</a>
+    </div>
+  </div>
+
+
+  <!-- Modal Structure -->
+  <div id="modal-criacao" class="modal">
+        <div class="modal-content">
+                <div class="row">
+                  <form class="col s12">
+                          <div class="row container">
+                            <div class="input-field col s12">
+                              <input placeholder="Placeholder" id="rm" name="cr-rm" type="text" class="validate">
+                              <label for="rm">RM</label>
+                            </div>
+                            <div class="input-field col s12">
+                                    <input placeholder="Placeholder" id="cr-nome" name="nome" type="text" class="validate">
+                                    <label for="nome">Nome</label>
+                            </div>
+                            <div class="input-field col s12">
+                                    <input placeholder="Placeholder" id="cr-curso" name="curso" type="text" class="validate">
+                                    <label for="curso">Curso</label>
+                            </div>                        
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+                <a href="#!" style="color: white" class="modal-close waves-effect waves-green btn-flat green">CRIAR USUARIO</a>
+        </div>
+      </div>
+
+      <!-- Modal Structure -->
+  <div id="modal-delecao" class="modal">
+        <div class="modal-content">
+           <h5>Confirmar Deleção do Usuário</h5>
+        </div>
+        <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect btn-flat">NÃO</a>
+                <a href="#!" style="color: white" class="modal-close waves-effect waves-red btn-flat red">CONFIRMA DELEÇÃO</a>
+        </div>
+    </div>
+
 
     <!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script>
+         let modalCriacao = null;
+         let modalEdicao = null;
+         document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems, {});
+             modalEdicao = instances[0];
+             modalCriacao = instances[1];
+             modalDelecao = instances[2];
+        });
+    </script>
     <script>
       let listaDeUsuarios = [];
       listaDeUsuarios.push({rm: 28984, nome: 'Raquel Jesus', curso: 'Informática'  });
       listaDeUsuarios.push({rm: 31055, nome: 'Felipe Chapeu', curso: 'Informática'  });
       let tabela = document.getElementById('tabela');
       function mostraModal(i){
-          alert(JSON.stringify(listaDeUsuarios[i]));
+          modalEdicao.open();
+          document.getElementById('ed-nome').value = listaDeUsuarios[i].nome;
+          document.getElementById('ed-curso').value = listaDeUsuarios[i].curso;
+      }
+      function mostraModalDelecao(i){
+          modalDelecao.open();
+         
       }
       function atualiza(){
         tabela.innerHTML = listaDeUsuarios.map((usuario,i) => `
@@ -52,7 +135,7 @@
                 <td>${usuario.nome}</td>
                 <td>${usuario.curso}</td>
                 <td><i onclick="mostraModal(${i})" class="material-icons">edit</i></td>
-                <td><i class="material-icons">close</i></td>
+                <td><i onclick="mostraModalDelecao(${i})" class="material-icons">close</i></td>
             </tr>
         `).join('');
       }
