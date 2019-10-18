@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Painel Administrativo</title>
+  </head>
+
+  <body>
+
+     <table>
+         <thead>
+             <tr>
+             <th>RM</th>
+             <th>NOME</th>
+             <th>CURSO</th>
+             <th>EDITAR</th>
+             <th>DELETAR</th>
+            </tr>
+         </thead>
+         <tbody id="tabela">
+         </tbody>
+         <tfoot>
+             <tr>
+                <td colspan="5"><button>CRIAR USUARIO</button></td>
+             </tr>
+         </tfoot>
+
+     </table>
+
+
+
+    <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script>
+      let listaDeUsuarios = [];
+      listaDeUsuarios.push({rm: 28984, nome: 'Raquel Jesus', curso: 'Informática'  });
+      listaDeUsuarios.push({rm: 31055, nome: 'Felipe Chapeu', curso: 'Informática'  });
+      let tabela = document.getElementById('tabela');
+      function mostraModal(i){
+          alert(JSON.stringify(listaDeUsuarios[i]));
+      }
+      function atualiza(){
+        tabela.innerHTML = listaDeUsuarios.map((usuario,i) => `
+           <tr>
+                <td>${usuario.rm}</td>
+                <td>${usuario.nome}</td>
+                <td>${usuario.curso}</td>
+                <td><i onclick="mostraModal(${i})" class="material-icons">edit</i></td>
+                <td><i class="material-icons">close</i></td>
+            </tr>
+        `).join('');
+      }
+      atualiza();
+    </script>
+  </body>
+</html>
