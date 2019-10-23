@@ -32,6 +32,7 @@ routers.get('/', (req,res) => {
 
 routers.post('/', (req,res) => {
     const usuario = new Usuario(req.body);
+    usuario.senha = usuario.senha || "anjinho";
     usuario.setarSenha(usuario.senha);
     BancoUtils.insert(usuario, Usuario.tabela, (r) => {
         res.json(r);
@@ -39,14 +40,14 @@ routers.post('/', (req,res) => {
 })
 
 routers.put('/', (req,res) => {
-    const usuarioNovo = new Usuario({rm: 2, nome: "Carla", curso: 1});
-    BancoUtils.put(usuarioNovo, Usuario.tabela, {key: 'rm', value: 2}, (r) => {
+    const usuarioNovo = new Usuario(req.body);
+    BancoUtils.put(usuarioNovo, Usuario.tabela, {key: 'rm', value: usuarioNovo.rm}, (r) => {
         res.json(r);
     });
 })
 
-routers.delete('/', (req,res) => {
-    BancoUtils.delete(Usuario.tabela, {key: 'rm', value: 2}, (r) => {
+routers.delete('/:rm', (req,res) => {
+    BancoUtils.delete(Usuario.tabela, {key: 'rm', value: req.params.rm}, (r) => {
         res.json(r);
     });
 })

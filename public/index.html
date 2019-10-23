@@ -42,7 +42,8 @@
   <div id="modal-edicao" class="modal">
     <div class="modal-content">
             <div class="row">
-              <form class="col s12">
+              <form id="form-edicao" class="col s12">
+                  <input type="hidden" id="ed-rm" name="rm" />
                       <div class="row container">
                         <div class="input-field col s12">
                                 <input placeholder="Placeholder" id="ed-nome" name="nome" type="text" class="validate">
@@ -57,7 +58,7 @@
         </div>
     </div>
     <div class="modal-footer">
-            <a href="#!" style="color: white" class="modal-close waves-effect waves-blue btn-flat blue">EDITAR</a>
+            <a onclick="editarUsuario()" href="#!" style="color: white" class="modal-close waves-effect waves-blue btn-flat blue">EDITAR</a>
     </div>
   </div>
 
@@ -66,10 +67,10 @@
   <div id="modal-criacao" class="modal">
         <div class="modal-content">
                 <div class="row">
-                  <form class="col s12">
+                  <form id="form-criacao" class="col s12">
                           <div class="row container">
                             <div class="input-field col s12">
-                              <input placeholder="Placeholder" id="rm" name="cr-rm" type="text" class="validate">
+                              <input placeholder="Placeholder" id="cr-rm" name="rm" type="text" class="validate">
                               <label for="rm">RM</label>
                             </div>
                             <div class="input-field col s12">
@@ -85,7 +86,7 @@
             </div>
         </div>
         <div class="modal-footer">
-                <a href="#!" style="color: white" class="modal-close waves-effect waves-green btn-flat green">CRIAR USUARIO</a>
+                <a onclick="criarUsuario()" href="#!" style="color: white" class="modal-close waves-effect waves-green btn-flat green">CRIAR USUARIO</a>
         </div>
       </div>
 
@@ -94,9 +95,12 @@
         <div class="modal-content">
            <h5>Confirmar Deleção do Usuário</h5>
         </div>
+        <form id="form-delecao">
+            <input type="hidden" name="rm" id="dl-rm"  />
+        </form>
         <div class="modal-footer">
                 <a href="#!" class="modal-close waves-effect btn-flat">NÃO</a>
-                <a href="#!" style="color: white" class="modal-close waves-effect waves-red btn-flat red">CONFIRMA DELEÇÃO</a>
+                <a onclick="deletarUsuario()" href="#!" style="color: white" class="modal-close waves-effect waves-red btn-flat red">CONFIRMA DELEÇÃO</a>
         </div>
     </div>
 
@@ -121,25 +125,61 @@
       let tabela = document.getElementById('tabela');
       function mostraModal(i){
           modalEdicao.open();
+          document.getElementById('ed-rm').value = listaDeUsuarios[i].rm;
           document.getElementById('ed-nome').value = listaDeUsuarios[i].nome;
           document.getElementById('ed-curso').value = listaDeUsuarios[i].curso;
       }
       function mostraModalDelecao(i){
           modalDelecao.open();
-         
+          document.getElementById('dl-rm').value = listaDeUsuarios[i].rm;
       }
       function atualiza(){
-        tabela.innerHTML = listaDeUsuarios.map((usuario,i) => `
-           <tr>
-                <td>${usuario.rm}</td>
-                <td>${usuario.nome}</td>
-                <td>${usuario.curso}</td>
-                <td><i onclick="mostraModal(${i})" class="material-icons">edit</i></td>
-                <td><i onclick="mostraModalDelecao(${i})" class="material-icons">close</i></td>
-            </tr>
-        `).join('');
+        fetch('/usuarios')
+        .then(res => res.json())
+        .then(dados => {
+            listaDeUsuarios = dados;
+            tabela.innerHTML = listaDeUsuarios.map((usuario,i) => `
+            <tr>
+                    <td>${usuario.rm}</td>
+                    <td>${usuario.nome}</td>
+                    <td>${usuario.curso}</td>
+                    <td><i onclick="mostraModal(${i})" class="material-icons">edit</i></td>
+                    <td><i onclick="mostraModalDelecao(${i})" class="material-icons">close</i></td>
+                </tr>
+            `).join('');
+        });
       }
       atualiza();
+
+
+    function criarUsuario(){
+        const formulario = document.getElementById("form-criacao");
+        const data = new URLSearchParams(new FormData(formulario));
+        fetch('/usuarios', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
+            body: data
+        })
+    }
+    
+    function editarUsuario(){
+        const formulario = document.getElementById("form-edicao");
+        const data = new URLSearchParams(new FormData(formulario));
+        fetch('/usuarios', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
+            body: data
+        })
+    }
+    
+    function deletarUsuario(){
+        const rm = document.getElementById('dl-rm').value;
+        fetch('/usuarios/'+ rm, {
+            method: 'DELETE'
+        })
+    }
+
+
     </script>
   </body>
 </html>
