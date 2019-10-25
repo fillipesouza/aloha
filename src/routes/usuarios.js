@@ -9,15 +9,17 @@ const routers = express.Router();
 
 
 routers.post('/auth', (req,res) => {
-   const usuario = new Usuario({rm: '3', nome: 'Raquel'});
-   usuario.setarSenha('thais123');
+   const usuario = new Usuario(req.body);
+   usuario.setarSenha(req.body.senha);
    new UsuarioDAO().buscaPorUsuarioESenha(usuario, (resposta) => {
     
     if(resposta.length > 0){
         const token = jwt.sign({ nome: resposta.nome }, segredo, {expiresIn: '1h'});
-        res.json(token);
+        res.cookie('token', token).redirect('/index');
+        //res.json(token);
     } else {
-        res.status(404).end('Nao Encontrado');
+       
+        res.status(301).redirect('/login');
     }
   });
    
