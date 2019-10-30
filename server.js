@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const Utils = require('./src/helpers/utils');
 const bodyParser = require('body-parser');
 const rotasDeUsuario = require('./src/routes/usuarios');
 const path = require('path');
@@ -24,6 +25,7 @@ app.get('/index', (req,res)=>{
     if(usuario.nivel == 1){
         res.sendFile(__dirname + '/public/main.html');
     } else {
+        const rmCripto = Utils.criptografa(''+usuario.rm);
         res.sendFile(__dirname + '/public/home.html');
     }
 })

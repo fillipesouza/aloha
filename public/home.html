@@ -10,13 +10,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Painel Administrativo</title>
   </head>
- <body>
+ <body class="container">
      <h3>Home Page</h3>
-     
+     <hr/>
+     <div class="row">  <!-- GRID -->
+         <div class="col m6 s12">
+             <img id="perfil" src="" alt="">
+             <form action="/usuarios/foto" method="post"  enctype='multipart/form-data'>
+                <div class="file-field input-field">
+                  <div class="btn">
+                    <span>File</span>
+                    <input type="file" name="foto">
+                  </div>
+                  <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+         </div>
+         <div class="col m6 s12"></div>
+     </div>
   
 
 
    <!--JavaScript at end of body for optimized loading-->
    <script type="text/javascript" src="js/materialize.min.js"></script>
+   <script>
+       function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+};
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+    document.getElementById('perfil').src ='assets/imagens/'+parseJwt(getCookie('token')).rm + '.jpg';
+   </script>
  </body>
 </html>
