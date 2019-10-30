@@ -18,7 +18,18 @@ app.get('/login', (req,res)=>{
     res.sendFile(__dirname + '/public/login.html');
 })
 app.get('/index', (req,res)=>{
-    res.sendFile(__dirname + '/public/main.html');
+    jwt.verify(req.cookies.token, segredo);
+    const usuario = jwt.decode(req.cookies.token);
+    console.log(usuario);
+    if(usuario.nivel == 1){
+        res.sendFile(__dirname + '/public/main.html');
+    } else {
+        res.sendFile(__dirname + '/public/home.html');
+    }
+})
+app.get('/home', (req,res)=>{
+    
+    res.sendFile(__dirname + '/public/home.html');
 })
 app.get('/', (req,res)=>{   
     const token = req.cookies.token;

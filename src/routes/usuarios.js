@@ -14,7 +14,7 @@ routers.post('/auth', (req,res) => {
    new UsuarioDAO().buscaPorUsuarioESenha(usuario, (resposta) => {
     
     if(resposta.length > 0){
-        const token = jwt.sign({ nome: resposta.nome }, segredo, {expiresIn: '1h'});
+        const token = jwt.sign({ nome: resposta.nome, nivel: resposta.admin }, segredo, {expiresIn: '1h'});
         res.cookie('token', token).redirect('/index');
         //res.json(token);
     } else {
